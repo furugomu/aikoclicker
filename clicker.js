@@ -2,6 +2,7 @@ var canvas = document.getElementById('canvas');
 var ASSETS = "./assets/";
 var queue = new createjs.LoadQueue(location.protocol!='file:');
 var stage = new createjs.Stage(canvas);
+createjs.Touch.enable(stage);
 stage.enableMouseOver();
 var background = new createjs.Container();
 stage.addChild(background);
