@@ -1,4 +1,5 @@
 var canvas = document.getElementById('canvas');
+canvas.addEventListener('selectstart', function(e) {e.preventDefault()}, false);
 var ASSETS = "./assets/";
 var queue = new createjs.LoadQueue(location.protocol!='file:');
 var stage = new createjs.Stage(canvas);
