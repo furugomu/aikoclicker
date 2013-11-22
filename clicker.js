@@ -7,10 +7,19 @@ stage.enableMouseOver();
 var background = new createjs.Container();
 stage.addChild(background);
 
-var sourceRects = {
-  n: new createjs.Rectangle(91, 29, 442, 442),
-  'n+': new createjs.Rectangle(106, 66, 261, 261),
-  a: new createjs.Rectangle(98, 70, 258, 258),
+var aikoResources = {
+  n: {
+    src: ASSETS+'n.png',
+    rect: new createjs.Rectangle(91, 29, 442, 442),
+  },
+  'n+': {
+    src: ASSETS+'n+.png',
+    rect: new createjs.Rectangle(106, 66, 261, 261),
+  },
+  a: {
+    src: ASSETS+'a.png',
+    rect: new createjs.Rectangle(98, 70, 258, 258),
+  }
 }
 
 function main() {
@@ -24,13 +33,11 @@ function main() {
   nowLoading.y = 200;
   stage.addChild(nowLoading);
 
-  queue.loadManifest([
-    {id: 'n', src: ASSETS+'n.png'},
-    {id: 'n+', src: ASSETS+'n+.png'},
-    {id: 'a', src: ASSETS+'a.png'},
-//    {id: 'egao', src: ASSETS+'n-egao.jpg'},
-    {id: 'bg', src: ASSETS+'bg.jpg'},
-  ]);
+  queue.loadFile({id: 'bg', src: ASSETS+'bg.jpg'});
+//    queue.loadFile({id: 'egao', src: ASSETS+'n-egao.jpg'});
+  for (var id in aikoResources) {
+    queue.loadFile({id: id, src: aikoResources[id].src});
+  }
   queue.on('complete', function() {
     stage.removeChild(nowLoading);
     // 背景
@@ -47,9 +54,13 @@ function main() {
   });
 }
 
+var aikoIds = null;
 function randomAiko() {
-  var a = ['n', 'n+', 'a'];
-  return a[Math.floor(Math.random()*a.length)];
+  if (!aikoIds) {
+    aikoIds = [];
+    for (var id in aikoResources) aikoIds.push(id);
+  }
+  return aikoIds[Math.floor(Math.random()*aikoIds.length)];
 }
 
 function createBigCookie() {
@@ -153,7 +164,7 @@ function _createCookie(id) {
   var cookie = new createjs.Container();
   var image = queue.getResult(id);
   var bmp = new createjs.Bitmap(image);
-  bmp.sourceRect = sourceRects[id];
+  bmp.sourceRect = aikoResources[id].rect;
   cookie.addChild(bmp);
 
   // よい大きさにする
