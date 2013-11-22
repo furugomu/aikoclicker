@@ -19,8 +19,8 @@ var aikoResources = {
   a: {
     src: ASSETS+'a.png',
     rect: new createjs.Rectangle(98, 70, 258, 258),
-  }
-}
+  },
+};
 
 function main() {
   createjs.Ticker.addEventListener('tick', function() {
@@ -34,7 +34,7 @@ function main() {
   stage.addChild(nowLoading);
 
   queue.loadFile({id: 'bg', src: ASSETS+'bg.jpg'});
-//    queue.loadFile({id: 'egao', src: ASSETS+'n-egao.jpg'});
+  queue.loadFile({id: 'egao', src: ASSETS+'n-egao.png'});
   for (var id in aikoResources) {
     queue.loadFile({id: id, src: aikoResources[id].src});
   }
@@ -66,6 +66,17 @@ function randomAiko() {
 function createBigCookie() {
   var cookie = createCookie('n');
 
+  // 笑顔をのっける
+  var egao = new createjs.Bitmap(queue.getResult('egao'));
+  cookie.addChild(egao);
+  var rect = aikoResources['n'].rect;
+  egao.scaleX = 300 / rect.width; // TODO: ここの300をどうにかしたい
+  egao.scaleY = 300 / rect.width;
+  egao.x = (190 - rect.x) * egao.scaleX;
+  egao.y = (200 - rect.y) * egao.scaleY;
+  egao.alpha = 0;
+  egao.mouseEnabled = false;
+
   // handle mouse events
   var scale = function(scale) {
     createjs.Tween.get(cookie).to({scaleX: scale, scaleY: scale}, 100);
@@ -75,12 +86,15 @@ function createBigCookie() {
   });
   cookie.on('mousedown', function() {
     scale(0.98);
-    cookie.on('pressup', function() {
+    createjs.Tween.get(egao).to({alpha: 1}, 100);
+    cookie.on('pressup', function(e) {
       scale(1.05);
+      createjs.Tween.get(egao).to({alpha: 0}, 0);
     }, null, true);
   });
   cookie.on('mouseout', function() {
     scale(1);
+    createjs.Tween.get(egao).to({alpha: 0}, 0);
     cookie.removeAllEventListeners('pressup');
   });
   cookie.on('click', function(e) {
@@ -162,32 +176,35 @@ function createCookie(id) {
 function _createCookie(id) {
   var width = 300, height = 300;
   var cookie = new createjs.Container();
+  cookie.regX = width / 2;
+  cookie.regY = height / 2;
   var image = queue.getResult(id);
   var bmp = new createjs.Bitmap(image);
   bmp.sourceRect = aikoResources[id].rect;
   cookie.addChild(bmp);
 
+  var bmpWidth = bmp.sourceRect.width;
+  var bmpHeight = bmp.sourceRect.height;
+
   // よい大きさにする
-  bmp.scaleX = width / bmp.sourceRect.width;
-  bmp.scaleY = height / bmp.sourceRect.height;
+  bmp.scaleX = width / bmpWidth;
+  bmp.scaleY = height / bmpHeight;
 
   // まるくする
-  var cx = width / 2, cy = height / 2;
+  var cx = bmpWidth / 2, cy = bmpHeight / 2;
   var r = Math.min(cx, cy);
-  cookie.regX = cx;
-  cookie.regY = cy;
 
   var mask = new createjs.Shape();
   mask.graphics.beginRadialGradientFill(
     ['rgba(0,0,0,1)', 'rgba(0,0,0,0)'], [0, 1],
     cx, cy, r * 0.8,
     cx, cy, r);
-  mask.graphics.drawRect(0, 0, width, height);
-  mask.cache(0, 0, width, height);
-  cookie.filters = [
+  mask.graphics.drawRect(0, 0, bmpWidth, bmpHeight);
+  mask.cache(0, 0, bmpWidth, bmpHeight);
+  bmp.filters = [
     new createjs.AlphaMaskFilter(mask.cacheCanvas),
   ];
-  cookie.cache(0, 0, width, height);
+  bmp.cache(0, 0, bmpWidth, bmpHeight);
   return cookie;
 }
 
