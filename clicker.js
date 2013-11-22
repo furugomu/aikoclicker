@@ -137,7 +137,7 @@ function createSpark(imageId, x, y) {
 function createRain(imageId) {
   var cookie = createFallingCookie(imageId, 0, 0);
 
-  cookie.scaleX = cookie.scaleY = 0.3;
+  cookie.scaleX = cookie.scaleY = 0.4;
   cookie.x = random(0, canvas.width);
   cookie.y = -60;
   cookie.rotation = random(0, 360);
