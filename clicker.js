@@ -17,9 +17,37 @@ var aikoResources = {
     src: ASSETS+'n+.png',
     rect: new createjs.Rectangle(106, 66, 261, 261),
   },
+  v: {
+    src: ASSETS+'v.png',
+    rect: new createjs.Rectangle(93, 75, 270, 270),
+  },
+  'v+': {
+    src: ASSETS+'v+.png',
+    rect: new createjs.Rectangle(103, 72, 277, 277),
+  },
+  f: {
+    src: ASSETS+'f.png',
+    rect: new createjs.Rectangle(123, 69, 266, 266),
+  },
+  'f+': {
+    src: ASSETS+'f+.png',
+    rect: new createjs.Rectangle(120, 64, 263, 263),
+  },
   a: {
     src: ASSETS+'a.png',
     rect: new createjs.Rectangle(98, 70, 258, 258),
+  },
+  'a+': {
+    src: ASSETS+'a+.png',
+    rect: new createjs.Rectangle(117, 62, 266, 266),
+  },
+  y: {
+    src: ASSETS+'y.jpg',
+    rect: new createjs.Rectangle(44, 0, 400, 400),
+  },
+  'y+': {
+    src: ASSETS+'y+.jpg',
+    rect: new createjs.Rectangle(34, 0, 400, 400),
   },
 };
 
